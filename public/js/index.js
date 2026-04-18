@@ -1,15 +1,39 @@
-// ─── State ────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────────────────
 let currentAttempts = 0;
 
-// ─── UI Helpers ───────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────
+// INIT EVENTS
+// ─────────────────────────────────────────────────────────
+document.getElementById('password').addEventListener('input', () => {
+  markFieldError('password', false);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') doLogin();
+});
+
+
+// ─────────────────────────────────────────────────────────
+// UI HELPERS
+// ─────────────────────────────────────────────────────────
 function showAlert(type, msg) {
-  ['alertError', 'alertWarn', 'alertSuccess'].forEach(id => {
-    document.getElementById(id).classList.remove('show');
+  const alertMap = {
+    error: { box: 'alertError', msg: 'alertErrorMsg' },
+    warn: { box: 'alertWarn', msg: 'alertWarnMsg' },
+    success: { box: 'alertSuccess', msg: 'alertSuccessMsg' }
+  };
+
+  // Hide semua alert
+  Object.values(alertMap).forEach(a => {
+    document.getElementById(a.box).classList.remove('show');
   });
-  const mapEl  = { error: 'alertError',    warn: 'alertWarn',    success: 'alertSuccess'    };
-  const mapMsg = { error: 'alertErrorMsg', warn: 'alertWarnMsg', success: 'alertSuccessMsg' };
-  document.getElementById(mapMsg[type]).textContent = msg;
-  document.getElementById(mapEl[type]).classList.add('show');
+
+  // Show alert sesuai type
+  document.getElementById(alertMap[type].msg).textContent = msg;
+  document.getElementById(alertMap[type].box).classList.add('show');
 }
 
 function hideAlerts() {
@@ -18,51 +42,63 @@ function hideAlerts() {
   });
 }
 
-function updateDots(n) {
+function updateDots(attempts) {
   for (let i = 1; i <= 3; i++) {
-    document.getElementById('dot' + i).classList.toggle('used', i <= n);
+    document.getElementById(`dot${i}`).classList.toggle('used', i <= attempts);
   }
-  document.getElementById('attemptLabel').textContent = `Percobaan login: ${n} / 3`;
+
+  document.getElementById('attemptLabel').textContent =
+    `Percobaan login: ${attempts} / 3`;
 }
 
 function shakeCard() {
   const card = document.querySelector('.card');
   card.classList.remove('shake');
-  void card.offsetWidth; // force reflow
+  void card.offsetWidth; // reflow
   card.classList.add('shake');
 }
 
-function setLoading(active) {
-  const btn    = document.getElementById('btnLogin');
-  const txt    = document.getElementById('btnText');
-  const spin   = document.getElementById('spinner');
-  btn.disabled = active;
-  btn.classList.toggle('loading', active);
-  txt.textContent      = active ? 'Memverifikasi...' : 'Masuk';
-  spin.style.display   = active ? 'inline-block' : 'none';
+function setLoading(isLoading) {
+  const btn  = document.getElementById('btnLogin');
+  const txt  = document.getElementById('btnText');
+  const spin = document.getElementById('spinner');
+
+  btn.disabled = isLoading;
+  btn.classList.toggle('loading', isLoading);
+
+  txt.textContent    = isLoading ? 'Memverifikasi...' : 'Masuk';
+  spin.style.display = isLoading ? 'inline-block' : 'none';
 }
 
 function markFieldError(id, active) {
   document.getElementById(id).classList.toggle('field-error', active);
 }
 
-// ─── Toggle Password ──────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────
+// PASSWORD TOGGLE
+// ─────────────────────────────────────────────────────────
 function togglePass() {
-  const inp = document.getElementById('password');
-  const btn = document.getElementById('toggleBtn');
-  if (inp.type === 'password') {
-    inp.type        = 'text';
-    btn.textContent = '🙈';
-  } else {
-    inp.type        = 'password';
-    btn.textContent = '👁';
-  }
+  const input = document.getElementById('password');
+  const btn   = document.getElementById('toggleBtn');
+
+  const isHidden = input.type === 'password';
+
+  input.type = isHidden ? 'text' : 'password';
+  btn.textContent = isHidden ? '🙈' : '👁';
 }
 
-// ─── Show overlays ────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────
+// OVERLAYS
+// ─────────────────────────────────────────────────────────
 function showSuccessOverlay(user) {
-  document.getElementById('successName').textContent = `Selamat, ${user.username}! 🎉`;
-  document.getElementById('successRole').textContent = `role: ${user.role} · ${user.email}`;
+  document.getElementById('successName').textContent =
+    `Selamat, ${user.username}! 🎉`;
+
+  document.getElementById('successRole').textContent =
+    `role: ${user.role} · ${user.email}`;
+
   document.getElementById('successOverlay').classList.add('show');
 }
 
@@ -71,13 +107,17 @@ function showBlockedOverlay(username) {
   document.getElementById('blockedOverlay').classList.add('show');
 }
 
-// ─── Login ────────────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────
+// LOGIN HANDLER
+// ─────────────────────────────────────────────────────────
 async function doLogin() {
   hideAlerts();
 
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value;
 
+  // VALIDASI
   if (!username || !password) {
     showAlert('error', 'Semua field wajib diisi!');
     return;
@@ -95,29 +135,29 @@ async function doLogin() {
     const result = await res.json();
     setLoading(false);
 
+    // ───── SUCCESS ─────
     if (result.success) {
       showSuccessOverlay(result.user);
       return;
     }
 
-    if (result.code === 'NOT_FOUND') {
-      showAlert('error', 'Akun tidak ditemukan');
-      return;
-    }
+    // ───── ERROR HANDLING ─────
+    switch (result.code) {
+      case 'NOT_FOUND':
+        showAlert('error', 'Akun tidak ditemukan');
+        break;
 
-    if (result.code === 'BLOCKED') {
-      showBlockedOverlay(username);
-      return;
-    }
+      case 'BLOCKED':
+      case 'BLOCKED_NOW':
+        showBlockedOverlay(username);
+        break;
 
-    if (result.code === 'BLOCKED_NOW') {
-      showBlockedOverlay(username);
-      return;
-    }
+      case 'WRONG_PASSWORD':
+        handleWrongPassword(result, username);
+        break;
 
-    if (result.code === 'WRONG_PASSWORD') {
-      showAlert('error', `Password salah (${result.sisa}x lagi)`);
-      return;
+      default:
+        showAlert('error', 'Terjadi kesalahan');
     }
 
   } catch (err) {
@@ -126,15 +166,42 @@ async function doLogin() {
   }
 }
 
-// ─── Reset Form ───────────────────────────────────────────────────────────────
+
+// ─────────────────────────────────────────────────────────
+// WRONG PASSWORD HANDLER
+// ─────────────────────────────────────────────────────────
+function handleWrongPassword(result, username) {
+  const usedAttempts = 3 - result.sisa;
+
+  currentAttempts = usedAttempts;
+  updateDots(currentAttempts);
+
+  shakeCard();
+  markFieldError('password', true);
+
+  const sisa = 3 - currentAttempts;
+  showAlert('error', `Password salah (${sisa}x lagi)`);
+
+  if (currentAttempts >= 3) {
+    showBlockedOverlay(username);
+  }
+}
+
+
+// ─────────────────────────────────────────────────────────
+// RESET
+// ─────────────────────────────────────────────────────────
 function resetForm() {
-  document.getElementById('username').value  = '';
-  document.getElementById('password').value  = '';
-  document.getElementById('password').type   = 'password';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+  document.getElementById('password').type  = 'password';
+
   document.getElementById('toggleBtn').textContent = '👁';
+
   hideAlerts();
   markFieldError('username', false);
   markFieldError('password', false);
+
   currentAttempts = 0;
   updateDots(0);
 }
@@ -144,8 +211,3 @@ function resetAll() {
   document.getElementById('blockedOverlay').classList.remove('show');
   resetForm();
 }
-
-// ─── Enter Key ────────────────────────────────────────────────────────────────
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
