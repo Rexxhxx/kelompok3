@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    /* =========================
+       NODE + ESM CONFIG
+    ========================= */
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    /* =========================
+       WAJIB BIAR TYPES AMAN
+    ========================= */
+    "types": ["node"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+
+    /* =========================
+       STRICT (AMAN & CLEAN)
+    ========================= */
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* =========================
+       ESM RULE (WAJIB KAMU PAKAI)
+    ========================= */
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+
+    /* =========================
+       PERFORMANCE
+    ========================= */
+    "skipLibCheck": true,
+
+    /* =========================
+       OUTPUT
+    ========================= */
+    "sourceMap": true
+  }
+}

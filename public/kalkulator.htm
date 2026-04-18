@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<!-- 1. DOCTYPE: memberitahu browser bahwa ini adalah HTML5 -->
+<html lang="id">
+<!-- 2. <html>: elemen root, atribut lang="id" untuk bahasa Indonesia -->
+<head>
+    <!-- 3. <head>: berisi metadata dan tautan/style yang tidak ditampilkan langsung -->
+    <meta charset="UTF-8">
+    <!-- 4. charset UTF-8: mendukung karakter internasional, termasuk aksara Indonesia -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 5. viewport: membuat halaman responsif di perangkat mobile (lebar = lebar layar, skala awal 1) -->
+    <title>Kalkulator Hari | Basic</title>
+    <!-- 6. title: judul yang muncul di tab browser -->
+    <style>
+        /* 7. CSS dimulai: semua gaya visual untuk halaman */
+        * {
+            box-sizing: border-box;
+            /* 8. box-sizing border-box: padding dan border tidak menambah lebar total elemen */
+            font-family: system-ui, 'Segoe UI', 'Roboto', sans-serif;
+            /* 9. font-family: prioritas font sistem modern */
+        }
+        body {
+            background: #f0f2f5;
+            /* 10. background: abu-abu muda netral */
+            margin: 0;
+            /* 11. margin 0: hilangkan jarak default body */
+            min-height: 100vh;
+            /* 12. min-height 100vh: tinggi minimal sebesar layar penuh */
+            display: flex;
+            /* 13. display flex: mengaktifkan Flexbox */
+            justify-content: center;
+            /* 14. justify-content center: memusatkan horizontal */
+            align-items: center;
+            /* 15. align-items center: memusatkan vertikal */
+            padding: 20px;
+            /* 16. padding 20px: memberi ruang di tepi layar */
+        }
+        .container {
+            max-width: 550px;
+            /* 17. batas lebar kontainer 550px */
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            /* 18. sudut membulat 32px */
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+            /* 19. bayangan lembut */
+            padding: 24px 20px 32px;
+        }
+        h1 {
+    font-size: 1.8rem;
+    margin: 0 0 6px 0;
+    color: #1e2a3a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+/* Fungsi: mengatur tampilan judul utama (h1) agar besar, berwarna gelap, dan menggunakan flexbox untuk menyelaraskan ikon dengan teks secara vertikal serta memberi jarak antar elemen di dalamnya. */
+
+.sub {
+    color: #4a627a;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    font-size: 0.85rem;
+}
+/* Fungsi: menata subjudul deskripsi dengan warna abu kebiruan, garis bawah tipis, jarak bawah yang cukup, dan ukuran huruf kecil agar tidak menonjol. */
+
+.card {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 16px 18px 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    border: 1px solid #e9edf2;
+}
+/* Fungsi: mendefinisikan tampilan kotak kartu (card) sebagai warna putih, sudut membulat, bayangan halus, serta jarak dalam dan antar kartu agar terlihat seperti panel terpisah. */
+
+.card h2 {
+    font-size: 1.3rem;
+    margin: 0 0 16px 0;
+    color: #0f2b3d;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+/* Fungsi: mengatur judul di dalam setiap kartu agar ukuran sedang, berwarna gelap, menggunakan flexbox untuk meratakan ikon dan teks, serta memberi jarak bawah sebelum konten berikutnya. */
+
+.input-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+/* Fungsi: membuat grup input (label + input) tersusun vertikal (kolom) dengan jarak antar elemen dan jarak bawah ke elemen berikutnya. */
+
+label {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #2c3e4e;
+}
+/* Fungsi: menata label input agar tebal (semibold), ukuran kecil, dan warna gelap yang nyaman dibaca. */
+        input, button {
+            border-radius: 60px;
+            /* 20. tombol dan input berbentuk pil */
+            border: 1px solid #cbd5e1;
+            padding: 10px 16px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        input:focus {
+            border-color: #3b7cbf;
+            box-shadow: 0 0 0 2px rgba(59,124,191,0.2);
+            /* 21. efek fokus pada input */
+        }
+        button {
+            background: #1f3b4c;
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 6px;
+        }
+        button:hover {
+            background: #0f2c3a;
+            transform: scale(0.97);
+            /* 22. efek hover: tombol mengecil sedikit */
+        }
+        .result {
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 12px 16px;
+            margin-top: 18px;
+            text-align: center;
+            border-left: 4px solid #3b7cbf;
+        }
+        .result p {
+            margin: 0 0 6px 0;
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .result span {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #1f4e6e;
+            display: block;
+        }
+        hr {
+            margin: 8px 0;
+            border-color: #eef2f9;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            color: #6c7f8f;
+            margin-top: 16px;
+        }
+    </style>
+    <!-- 23. Penutup CSS -->
+</head>
+<body>
+<!-- 24. <body>: konten yang terlihat oleh pengguna -->
+<div class="container">
+    <!-- 25. container pembungkus utama -->
+    <h1>📆 Kalkulator Hari</h1>
+    <!-- 26. heading utama dengan emoji -->
+    <div class="sub">✔ Selisih tanggal · Konversi hari · Prediksi tanggal</div>
+    <!-- 27. subjudul deskripsi fitur -->
+
+    <!-- 28. CARD 1: SELISIH TANGGAL -->
+    <div class="card">
+        <h2>📅 1. Selisih Antar Tanggal</h2>
+        <div class="input-group">
+            <label>Tanggal mulai</label>
+            <input type="date" id="tglMulai" value="2026-04-01">
+            <!-- 29. input date dengan nilai default 1 April 2026 -->
+        </div>
+        <div class="input-group">
+            <label>Tanggal akhir</label>
+            <input type="date" id="tglAkhir" value="2026-04-09">
+        </div>
+        <button id="hitungSelisih">Hitung Jumlah Hari</button>
+        <!-- 30. tombol yang memicu fungsi hitungSelisih() -->
+        <div class="result" id="hasilSelisih">
+            <p>📊 Selisih hari</p>
+            <span id="nilaiSelisih">—</span>
+        </div>
+    </div>
+
+    <!-- 31. CARD 2: KONVERSI HARI -->
+    <div class="card">
+        <h2>🔄 2. Konversi Hari</h2>
+        <div class="input-group">
+            <label>Masukkan jumlah hari</label>
+            <input type="number" id="jumlahHari" value="100" placeholder="contoh: 365">
+        </div>
+        <button id="konversiBtn">Konversi ke Tahun/Bulan/Minggu/Hari</button>
+        <div class="result" id="hasilKonversi">
+            <p>📦 Hasil konversi</p>
+            <span id="teksKonversi">—</span>
+        </div>
+    </div>
+
+    <!-- 32. CARD 3: PREDIKSI TANGGAL -->
+    <div class="card">
+        <h2>🗓️ 3. Prediksi Tanggal</h2>
+        <div class="input-group">
+            <label>Tanggal awal</label>
+            <input type="date" id="tanggalAwal" value="2026-04-09">
+        </div>
+        <div class="input-group">
+            <label>➕ Jumlah hari (bisa minus untuk mundur)</label>
+            <input type="number" id="tambahHari" value="30" placeholder="misal: 100 atau -15">
+        </div>
+        <button id="prediksiBtn">Hitung Tanggal Akhir</button>
+        <div class="result" id="hasilPrediksi">
+            <p>📌 Tanggal setelah +/– hari</p>
+            <span id="nilaiPrediksi">—</span>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 33. JavaScript dimulai: semua fungsi interaktif
+
+    // ---------- FUNGSI 1: SELISIH TANGGAL ----------
+    // 34. Fungsi ini menghitung jarak absolut (dalam hari) antara dua tanggal
+    function hitungSelisih() {
+        const mulai = document.getElementById('tglMulai').value;
+        const akhir = document.getElementById('tglAkhir').value;
+        // 35. ambil nilai input date
+        if (!mulai || !akhir) {
+            document.getElementById('nilaiSelisih').innerText = 'Pilih kedua tanggal';
+            return;
+        }
+        const date1 = new Date(mulai);
+        const date2 = new Date(akhir);
+        // 36. konversi string ke objek Date
+        if (isNaN(date1) || isNaN(date2)) {
+            document.getElementById('nilaiSelisih').innerText = 'Tanggal tidak valid';
+            return;
+        }
+        const diffTime = Math.abs(date2 - date1);
+        // 37. selisih dalam milidetik, pakai Math.abs agar selalu positif
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        // 38. konversi milidetik ke hari (1000ms * 60 * 60 * 24)
+        document.getElementById('nilaiSelisih').innerText = diffDays + ' hari';
+    }
+
+    // ---------- FUNGSI 2: KONVERSI HARI ----------
+    // 39. Mengkonversi total hari ke tahun (365 hari), bulan (30 hari), minggu, sisa hari
+    function konversiHari() {
+        let hari = parseInt(document.getElementById('jumlahHari').value);
+        if (isNaN(hari) || hari < 0) hari = 0;
+        let sisa = hari;
+        const tahun = Math.floor(sisa / 365);
+        sisa %= 365;
+        const bulan = Math.floor(sisa / 30);
+        sisa %= 30;
+        const minggu = Math.floor(sisa / 7);
+        const hariSisa = sisa % 7;
+        
+        let hasilText = '';
+        if (tahun > 0) hasilText += `${tahun} tahun `;
+        if (bulan > 0) hasilText += `${bulan} bulan `;
+        if (minggu > 0) hasilText += `${minggu} minggu `;
+        if (hariSisa > 0) hasilText += `${hariSisa} hari`;
+        if (hasilText === '') hasilText = '0 hari';
+        
+        document.getElementById('teksKonversi').innerHTML = hasilText + `<span style="font-size:0.7rem; display:block; margin-top:5px;">total ${hari.toLocaleString()} hari</span>`;
+        // 40. tampilkan hasil konversi + total hari asli
+    }
+
+    // ---------- FUNGSI 3: PREDIKSI TANGGAL ----------
+    // 41. Menambah atau mengurangi hari dari tanggal awal, lalu menampilkan tanggal akhir
+    function prediksiTanggal() {
+        const tanggalStr = document.getElementById('tanggalAwal').value;
+        let tambah = parseInt(document.getElementById('tambahHari').value);
+        if (isNaN(tambah)) tambah = 0;
+        if (!tanggalStr) {
+            document.getElementById('nilaiPrediksi').innerText = 'Pilih tanggal awal';
+            return;
+        }
+        const tgl = new Date(tanggalStr);
+        if (isNaN(tgl)) {
+            document.getElementById('nilaiPrediksi').innerText = 'Tanggal tidak valid';
+            return;
+        }
+        tgl.setDate(tgl.getDate() + tambah);
+        // 42. setDate menangani otomatis perubahan bulan/tahun
+        const tahun = tgl.getFullYear();
+        const bulan = String(tgl.getMonth() + 1).padStart(2, '0');
+        const hari = String(tgl.getDate()).padStart(2, '0');
+        document.getElementById('nilaiPrediksi').innerHTML = `${hari}/${bulan}/${tahun} <span style="font-size:0.7rem;">(${tahun}-${bulan}-${hari})</span>`;
+    }
+
+    // 43. Event listeners: menghubungkan tombol dengan fungsi
+    document.getElementById('hitungSelisih').addEventListener('click', hitungSelisih);
+    document.getElementById('konversiBtn').addEventListener('click', konversiHari);
+    document.getElementById('prediksiBtn').addEventListener('click', prediksiTanggal);
+
+    // 44. Saat halaman selesai dimuat, jalankan semua fungsi untuk menampilkan nilai default
+    window.addEventListener('DOMContentLoaded', () => {
+        hitungSelisih();
+        konversiHari();
+        prediksiTanggal();
+    });
+    // 45. Penutup script
+</script>
+</body>
+</html>

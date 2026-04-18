@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Halaman Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="container">
+  <div class="card">
+
+    <!-- SUCCESS OVERLAY -->
+    <div class="success-overlay" id="successOverlay">
+      <div class="success-ring">✓</div>
+      <div class="success-name" id="successName">Selamat datang!</div>
+      <div class="success-role" id="successRole">role: user</div>
+      <button class="success-back" onclick="resetAll()">↩ Kembali ke Login</button>
+    </div>
+
+    <!-- BLOCKED OVERLAY -->
+    <div class="blocked-overlay" id="blockedOverlay">
+      <div class="blocked-icon">🔒</div>
+      <h3>Akun Terblokir</h3>
+      <p>
+        Akun <code id="blockedUser"></code> telah diblokir secara otomatis karena
+        3x percobaan login gagal.<br/>
+        Status tersimpan ke <code>data.json</code>.
+      </p>
+      <button class="success-back" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.3);color:#fca5a5;" onclick="resetAll()">↩ Coba Akun Lain</button>
+    </div>
+
+    <!-- LOGO -->
+    <div class="logo">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-text">
+        <h1>Kelompok3App</h1>
+        <span>New Series 2026</span>
+      </div>
+    </div>
+
+    <div class="form-title">
+      <h2>Halaman Login</h2>
+      <p>Masuk menggunakan akun yang terdaftar di <code style="font-family:'JetBrains Mono';font-size:11px;background:var(--surface2);padding:2px 6px;border-radius:4px;color:var(--accent2)">data.json</code></p>
+    </div>
+
+    <!-- ALERTS -->
+    <div class="alert alert-error" id="alertError">
+      <span class="alert-icon">⚠</span>
+      <span class="alert-msg" id="alertErrorMsg">Username atau password salah.</span>
+    </div>
+
+    <div class="alert alert-warn" id="alertWarn">
+      <span class="alert-icon">⚡</span>
+      <span class="alert-msg" id="alertWarnMsg">Peringatan!</span>
+    </div>
+
+    <div class="alert alert-success" id="alertSuccess">
+      <span class="alert-icon">✓</span>
+      <span class="alert-msg" id="alertSuccessMsg">Login berhasil!</span>
+    </div>
+
+    <!-- FORM -->
+    <div class="field">
+      <label>Username</label>
+      <div class="input-wrap">
+        <input type="text" id="username" placeholder="Masukkan username..." autocomplete="off"/>
+        <span class="input-icon">👤</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Password</label>
+      <div class="input-wrap">
+        <input type="password" id="password" placeholder="Masukkan password..." autocomplete="off"/>
+        <span class="input-icon">🔑</span>
+        <button class="toggle-pass" onclick="togglePass()" id="toggleBtn" type="button">👁</button>
+      </div>
+    </div>
+
+    <!-- Attempt dots -->
+    <div style="margin-bottom:18px">
+      <div class="attempt-bar">
+        <div class="attempt-dot" id="dot1"></div>
+        <div class="attempt-dot" id="dot2"></div>
+        <div class="attempt-dot" id="dot3"></div>
+      </div>
+      <div class="attempt-label" id="attemptLabel">Percobaan login: 0 / 3</div>
+    </div>
+
+    <button class="btn-login" id="btnLogin" onclick="doLogin()">
+      <span class="spinner" id="spinner"></span>
+      <span id="btnText">Masuk</span>
+    </button>
+
+    <button class="btn-reset" onclick="resetForm()">
+      🔄 Reset Form
+    </button>
+
+    <div class="divider"></div>
+
+    <div class="footer-info">
+      Source: <span>data.json</span> &nbsp;|&nbsp; Realtime sync aktif<br/>
+      Auto-block setelah <span>3x</span> gagal login<br/>
+      Tambah akun di <span>data.json</span> → langsung bisa login
+    </div>
+
+  </div><!-- .card -->
+</div><!-- .container -->
+<!--fungsional javascript-->
+<script src="/js/index.js"></script>
+</body>
+</html>

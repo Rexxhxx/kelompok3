@@ -1,0 +1,40 @@
+{
+  "accounts": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin123",
+      "role": "Administrator",
+      "email": "admin@example.com",
+      "blocked": false,
+      "failedAttempts": 0
+    },
+    {
+      "id": 2,
+      "username": "user1",
+      "password": "user123",
+      "role": "User",
+      "email": "user1@example.com",
+      "blocked": true,
+      "failedAttempts": 0
+    },
+    {
+      "id": 3,
+      "username": "budi",
+      "password": "budi2024",
+      "role": "User",
+      "email": "budi@example.com",
+      "blocked": false,
+      "failedAttempts": 0
+    },
+    {
+      "id": 4,
+      "username": "iblis",
+      "password": "iblis2024",
+      "role": "Iblis",
+      "email": "iblis@example.com",
+      "blocked": false,
+      "failedAttempts": 0
+    }
+  ]
+}
